@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { userSignup } from "../../utils/serverRequest";
 
 const SignupPage = () => {
   return (
@@ -16,7 +17,7 @@ const SignupForm = () => {
     event.preventDefault();
 
     // Get email and password from input field
-    const displayName = event.target.value.displayName;
+    const displayName = event.target.displayName.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
 
@@ -32,22 +33,12 @@ const SignupForm = () => {
 
     // Send login info to backend
     try {
-
-      const res = await fetch(`http://127.0.0.1:4000/api/auth/signup`, {
-        method: "post",
-        headers: {
-          "Accept": "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      const resData = await res.json();
+      const resData = await userSignup(body);
 
       if (resData.success) {
-        // Try to access token and displayName
-        // and save into local storage
-        if (resData.token && resData.displayName) {
-          window.localStorage.setItem("token", resData.token);
+
+        // Save displayName into local storage
+        if (resData.displayName) {
           window.localStorage.setItem("displayName", resData.displayName);
           window.location.assign("/");
         }

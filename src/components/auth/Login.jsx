@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { userLogin } from "../../utils/serverRequest";
 
 const LoginPage = () => {
   return (
@@ -29,26 +30,14 @@ const LoginForm = () => {
       email, password
     };
 
-    // Send login info to backend
     try {
-
-      const res = await fetch("http://127.0.0.1:4000/api/auth/login", {
-        method: "post",
-        headers: {
-          "Accept": "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      const resData = await res.json();
+      const resData = await userLogin(body);
 
       // If success field is true
       if (resData.success) {
 
-        // Try to access token and displayName
-        // and save into local storage
-        if (resData.token && resData.displayName) {
-          window.localStorage.setItem("token", resData.token);
+        // Save displayName into local storage
+        if (resData.displayName) {
           window.localStorage.setItem("displayName", resData.displayName);
           window.location.assign("/");
         }
