@@ -35,9 +35,17 @@ const fetchPortfolio = async () => {
   return res.data;
 }
 
+const removeSecurity = async (id) => {
+  const res = await axios.delete(baseUrl + "/" + id, {
+    withCredentials: true,
+  });
+
+  return res.data;
+}
 
 export {
   userLogin,
   userSignup,
   fetchPortfolio,
+  removeSecurity,
 }

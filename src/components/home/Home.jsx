@@ -16,11 +16,19 @@ const HomePage = () => {
     return window.location.assign("/login");
   }
 
+  const removeSecurity = (id) => {
+    updateUserPortfolio(userPortfolio.filter((userP) => userP.id !== id));
+  }
+
   return (
     <div>
       <h1>Welcome to home page</h1>
       {userPortfolio.map((userP) => (
-        <SymbolCard userP={userP} key={userP.id} />
+        <SymbolCard
+          userP={userP}
+          key={userP.id}
+          removeSecurity={removeSecurity}
+        />
       ))}
     </div>
   )
