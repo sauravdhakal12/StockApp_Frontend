@@ -1,41 +1,71 @@
 import PropTypes from "prop-types";
-import { removeSecurity } from "../../utils/serverRequest";
+import "./index.css";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 const SymbolCard = (props) => {
 
-  const handleDelete = async (event) => {
-    event.preventDefault();
+  let text = (props.userP.porl > 0) ? "Profit" : "Loss";
+  let d = new Date(props.userP.timestamp).toString();
+  let a = d.substring(4, 15);
 
-    const confirmDelete = confirm("Are you sure");
-
-    if (confirmDelete) {
-
-      const res = await removeSecurity(props.userP.id);
-
-      if (res.success) {
-        props.removeSecurity(props.userP.id);
-        alert("Item deleted");
+  const handleRemove = async (id) => {
+    const res = await fetch("http://localhost:4000/" + id, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       }
-      else {
-        alert("Item not deleted");
-      }
+    });
+
+    const resJson = await res.json();
+    if (resJson.success) {
+      props.setNeedReload(props.needReload + 1);
+      alert("Deleted");
     }
-  };
+    else {
+      alert(resJson.message);
+    }
+  }
 
   return (
-    <div style={{ padding: 20, margin: 20 }}>
-      <h2 style={{ textDecoration: "underline" }}>{props.userP.cmpSymbol}</h2>
-      <p><b>Quantity: </b> {props.userP.quantity}</p>
-      <p><b>Price: </b> {props.userP.buyPrice}</p>
-      <p><b>Date: </b> {props.userP.date}</p>
-      <button onClick={handleDelete} > Delete</button>
-    </div >
-  )
+    <Card style={{ margin: 20 }} className={props.userP.porl < 0 ? "loss" : "profit"}>
+      <CardHeader>
+        <CardTitle style={{ fontSize: 25 }}>{props.userP.cmpSymbol}</CardTitle>
+
+        <CardDescription style={{ color: "#444444" }}>
+          {a}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-2">
+        <div className="space-y-1" style={{ marginLeft: 20 }} >
+          <p><b>Quantity: </b> {props.userP.quantity}</p>
+          <p><b>Buy Price: </b> {props.userP.buyPrice}</p>
+          <p><b>LTP: </b> {(props.userP.ltp).toFixed(2)}</p>
+          <p><b>Total {text}: </b> {(props.userP.porl * props.userP.quantity).toFixed(2)}</p>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button onClick={() => { handleRemove(props.userP.id) }} >Remove</Button>
+      </CardFooter>
+
+    </Card>
+  );
 }
 
 SymbolCard.propTypes = {
   userP: PropTypes.object.isRequired,
   removeSecurity: PropTypes.func,
+  marketOpen: PropTypes.bool,
 }
 
 export default SymbolCard;

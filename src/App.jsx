@@ -3,17 +3,16 @@ import {
   Routes, Route
 } from "react-router-dom";
 
-import LoginPage from "./components/auth/Login";
-import SignupPage from "./components/auth/SignUp";
+import AuthPage from "./components/auth/Auth";
 import HomePage from "./components/home/Home";
+import "../app/globals.css"
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route exact path="/" Component={HomePage} />
-        <Route path="/login" Component={LoginPage} />
-        <Route path="/signup" Component={SignupPage} />
+        <Route path="/auth" Component={AuthPage} />
       </Routes>
     </Router>
   )
