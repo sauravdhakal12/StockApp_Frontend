@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:4000"
-const baseAuthUrl = "http://localhost:4000/api/auth/"
+const baseUrl = "https://stock-app-server-seven.vercel.app/"
+const baseAuthUrl = "https://stock-app-server-seven.vercel.app/api/auth"
 
 
 /*
